@@ -1,0 +1,1359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Corrosion Resistance in Electronics: Advanced Materials & Electroplating</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Fira+Code:wght@300;400;500;600;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --primary-glow: #98c379;
+  --secondary-glow: #c678dd;
+  --accent-glow: #e5c07b;
+  --blue-token: #61afef;
+  --coral-token: #e06c75;
+  --teal-token: #56b6c2;
+  --dark-bg: #1e2127;
+  --darker-bg: #181a1f;
+  --card-bg: rgba(40, 44, 52, 0.9);
+  --glass-bg: rgba(40, 44, 52, 0.6);
+  --border-color: rgba(152, 195, 121, 0.25);
+  --neon-glow: 0 0 18px rgba(152, 195, 121, 0.3);
+  --text-primary: #abb2bf;
+  --text-secondary: #636d83;
+  --line-number: #4b5263;
+  --font-main: 'Space Grotesk', sans-serif;
+  --font-mono: 'Fira Code', monospace;
+  --font-display: 'Syne', sans-serif;
+}
+
+body {
+  font-family: var(--font-main);
+  line-height: 1.7;
+  color: var(--text-primary);
+  background: var(--dark-bg);
+  overflow-x: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background:
+    radial-gradient(circle at 20% 80%, rgba(198,120,221,0.15) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(229,192,123,0.12) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(152,195,121,0.1) 0%, transparent 50%);
+  animation: pulseBg 20s ease-in-out infinite alternate;
+  z-index: -2;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background-image:
+    radial-gradient(1px 1px at 20px 30px, #98c379, transparent),
+    radial-gradient(1px 1px at 40px 70px, #c678dd, transparent),
+    radial-gradient(1px 1px at 90px 40px, #e5c07b, transparent),
+    radial-gradient(1px 1px at 130px 80px, #61afef, transparent),
+    radial-gradient(1px 1px at 160px 30px, #e06c75, transparent),
+    radial-gradient(1px 1px at 200px 60px, #56b6c2, transparent);
+  background-repeat: repeat;
+  background-size: 220px 110px;
+  animation: matrixRain 60s linear infinite;
+  z-index: -1;
+  opacity: 0.4;
+}
+
+@keyframes pulseBg {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.7; }
+}
+
+@keyframes matrixRain {
+  0% { transform: translateY(0) rotate(0deg); }
+  100% { transform: translateY(-1000px) rotate(360deg); }
+}
+
+/* Header */
+header {
+  background: rgba(10,10,15,0.95);
+  backdrop-filter: blur(20px);
+  color: white;
+  padding: 1rem 0;
+  position: fixed;
+  width: 100%; top: 0; z-index: 1000;
+  box-shadow: var(--neon-glow), 0 2px 20px rgba(0,0,0,0.5);
+  border-bottom: 1px solid var(--border-color);
+}
+
+nav {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 2rem;
+}
+
+.logo {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 800;
+  background: linear-gradient(45deg, var(--primary-glow), var(--accent-glow));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.02em;
+}
+
+.nav-links { display: flex; list-style: none; gap: 2.5rem; }
+
+.nav-links a {
+  color: var(--text-primary);
+  text-decoration: none;
+  font-weight: 500;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  position: relative;
+  transition: all 0.3s ease;
+  letter-spacing: 0.03em;
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -5px; left: 0;
+  width: 0; height: 2px;
+  background: linear-gradient(90deg, var(--primary-glow), var(--accent-glow));
+  transition: width 0.3s ease;
+}
+
+.nav-links a:hover::after { width: 100%; }
+.nav-links a:hover { color: var(--primary-glow); text-shadow: 0 0 10px rgba(152,195,121,0.6); }
+
+.hamburger {
+  display: none;
+  flex-direction: column;
+  cursor: pointer;
+  gap: 5px;
+  background: none;
+  border: none;
+  padding: 5px;
+}
+
+.hamburger span {
+  width: 25px; height: 2px;
+  background: var(--primary-glow);
+  transition: all 0.3s ease;
+}
+
+/* Hero */
+.hero {
+  background:
+    linear-gradient(135deg, rgba(24,26,31,0.97) 0%, rgba(30,33,39,0.95) 100%),
+    radial-gradient(circle at 70% 50%, rgba(152,195,121,0.12) 0%, transparent 60%),
+    radial-gradient(circle at 20% 80%, rgba(198,120,221,0.1) 0%, transparent 50%);
+  color: white;
+  padding: 120px 0 80px;
+  position: relative;
+  overflow: hidden;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(152,195,121,0.05)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+  animation: gridMove 30s linear infinite;
+}
+
+@keyframes gridMove {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(50px, 50px); }
+}
+
+.hero-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  position: relative; z-index: 2;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+  width: 100%;
+}
+
+.hero-right {
+  background: rgba(24,26,31,0.8);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 1.8rem;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  line-height: 1.9;
+}
+
+.hero-right .win-bar {
+  display: flex; gap: 6px; align-items: center; margin-bottom: 1.2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(152,195,121,0.1);
+}
+.win-dot { width: 12px; height: 12px; border-radius: 50%; }
+.win-dot.red { background: #e06c75; }
+.win-dot.amber { background: #e5c07b; }
+.win-dot.green { background: #98c379; }
+.win-title { font-family: var(--font-mono); font-size: 0.75rem; color: var(--line-number); margin-left: 8px; }
+
+.code-comment { color: var(--text-secondary); }
+.code-keyword { color: var(--secondary-glow); }
+.code-string { color: var(--primary-glow); }
+.code-fn { color: var(--accent-glow); }
+.code-var { color: var(--blue-token); }
+.code-num { color: var(--coral-token); }
+.code-op { color: var(--teal-token); }
+.code-line { display: flex; gap: 1.2rem; }
+.code-ln { color: var(--line-number); user-select: none; min-width: 1.4rem; text-align: right; font-size: 0.75rem; padding-top: 1px; }
+
+.hero h1 {
+  font-family: var(--font-display);
+  font-size: 3.8rem;
+  font-weight: 800;
+  margin-bottom: 1.2rem;
+  line-height: 1.0;
+  letter-spacing: -0.03em;
+  background: linear-gradient(135deg, #e5c07b 0%, #98c379 50%, #61afef 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-tag {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--primary-glow);
+  background: rgba(152,195,121,0.1);
+  border: 1px solid rgba(152,195,121,0.3);
+  border-radius: 4px;
+  padding: 3px 10px;
+  display: inline-block;
+  margin-bottom: 1.2rem;
+  letter-spacing: 0.08em;
+}
+
+.hero p {
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+  opacity: 0.85;
+  max-width: 480px;
+  font-weight: 300;
+  color: var(--text-primary);
+  line-height: 1.8;
+}
+
+.hero-buttons { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+.cta-button {
+  display: inline-block;
+  background: linear-gradient(45deg, rgba(152,195,121,0.15), rgba(198,120,221,0.15));
+  color: #e5c07b;
+  padding: 1.2rem 3rem;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 700;
+  font-family: var(--font-display);
+  transition: all 0.4s ease;
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(152,195,121,0.4);
+  position: relative;
+  overflow: hidden;
+  font-size: 0.9rem;
+  letter-spacing: 0.05em;
+}
+
+.cta-button::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(152,195,121,0.2), transparent);
+  transition: left 0.5s;
+}
+
+.cta-button:hover::before { left: 100%; }
+.cta-button:hover {
+  background: linear-gradient(45deg, rgba(152,195,121,0.3), rgba(229,192,123,0.25));
+  transform: translateY(-3px);
+  box-shadow: 0 0 20px rgba(152,195,121,0.4), 0 20px 40px rgba(0,0,0,0.3);
+  color: #fff;
+}
+
+.cta-button-outline {
+  display: inline-block;
+  background: transparent;
+  color: var(--text-primary);
+  padding: 1.2rem 2.5rem;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 600;
+  font-family: var(--font-mono);
+  transition: all 0.4s ease;
+  border: 1px solid var(--border-color);
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+}
+.cta-button-outline:hover {
+  border-color: var(--primary-glow);
+  color: var(--primary-glow);
+}
+
+.container { max-width: 1400px; margin: 0 auto; padding: 0 2rem; }
+
+section { padding: 100px 0; position: relative; }
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: 2.8rem;
+  font-weight: 800;
+  text-align: center;
+  margin-bottom: 1rem;
+  letter-spacing: -0.02em;
+  background: linear-gradient(45deg, var(--accent-glow), var(--primary-glow));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.section-subtitle {
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-bottom: 3.5rem;
+  letter-spacing: 0.05em;
+}
+
+/* Features Grid */
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 3rem;
+  margin-top: 4rem;
+}
+
+.feature-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  padding: 3rem;
+  border-radius: 8px;
+  box-shadow: var(--neon-glow), 0 25px 50px rgba(0,0,0,0.3);
+  transition: all 0.4s ease;
+  border: 1px solid var(--border-color);
+  position: relative;
+  overflow: hidden;
+}
+
+.feature-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary-glow), var(--blue-token));
+}
+
+.feature-card:hover {
+  transform: translateY(-12px) scale(1.02);
+  box-shadow: 0 0 40px rgba(152,195,121,0.3), 0 35px 70px rgba(0,0,0,0.4);
+  border-color: var(--primary-glow);
+}
+
+.feature-card i {
+  font-size: 3.5rem;
+  background: linear-gradient(45deg, var(--blue-token), var(--teal-token));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 2rem;
+  filter: drop-shadow(0 0 15px rgba(97,175,239,0.5));
+  display: block;
+}
+
+.feature-card h3 {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: var(--text-primary);
+}
+
+.feature-card p { color: var(--text-secondary); font-size: 1.05rem; line-height: 1.8; }
+
+/* Stats */
+.stats {
+  background:
+    linear-gradient(135deg, rgba(24,26,31,0.95) 0%, rgba(30,33,39,0.9) 100%),
+    radial-gradient(circle at 20% 50%, rgba(152,195,121,0.1) 0%, transparent 70%);
+  text-align: center;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 3rem;
+  margin-top: 4rem;
+}
+
+.stat-item h3 {
+  font-family: var(--font-display);
+  font-size: 4rem;
+  font-weight: 900;
+  background: linear-gradient(45deg, var(--coral-token), var(--accent-glow));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 1rem;
+  filter: drop-shadow(0 0 20px rgba(229,192,123,0.5));
+}
+
+.stat-item p {
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+  font-family: var(--font-mono);
+}
+
+/* Steps */
+.steps { background: var(--dark-bg); }
+
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 3rem;
+  margin-top: 4rem;
+}
+
+.step-card {
+  text-align: center;
+  padding: 4rem 2.5rem;
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  border-radius: 8px;
+  box-shadow: var(--neon-glow), 0 25px 50px rgba(0,0,0,0.3);
+  border: 1px solid var(--border-color);
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.step-card::after {
+  content: '';
+  position: absolute;
+  top: -50%; left: -50%;
+  width: 200%; height: 200%;
+  background: radial-gradient(circle, rgba(152,195,121,0.04) 0%, transparent 70%);
+  animation: rotateBg 20s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes rotateBg {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.step-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 0 40px rgba(152,195,121,0.3), 0 40px 80px rgba(0,0,0,0.4);
+  border-color: var(--primary-glow);
+}
+
+.step-number {
+  width: 100px; height: 100px;
+  background: linear-gradient(135deg, var(--secondary-glow), var(--blue-token));
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center; justify-content: center;
+  font-size: 2.5rem;
+  font-weight: 900;
+  font-family: var(--font-display);
+  margin: 0 auto 2.5rem;
+  box-shadow: 0 0 20px rgba(198,120,221,0.5), inset 0 0 20px rgba(255,255,255,0.1);
+  position: relative; z-index: 2;
+}
+
+.step-card h3 {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: var(--text-primary);
+}
+
+.step-card p { color: var(--text-secondary); font-size: 1.05rem; }
+
+/* Tech Specs */
+.tech-specs {
+  background:
+    linear-gradient(135deg, rgba(198,120,221,0.08) 0%, rgba(97,175,239,0.08) 100%),
+    var(--dark-bg);
+}
+
+.specs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-top: 4rem;
+}
+
+.spec-item {
+  background: var(--glass-bg);
+  padding: 2rem;
+  border-radius: 6px;
+  border-left: 3px solid var(--primary-glow);
+  transition: all 0.3s ease;
+}
+
+.spec-item:hover {
+  transform: translateX(8px);
+  box-shadow: -4px 0 20px rgba(152,195,121,0.3);
+}
+
+.spec-item i {
+  font-size: 2rem;
+  color: var(--accent-glow);
+  margin-bottom: 1rem;
+  display: block;
+  filter: drop-shadow(0 0 8px rgba(229,192,123,0.5));
+}
+
+.spec-item h4 {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--primary-glow);
+  margin-bottom: 0.75rem;
+}
+
+.spec-item p { color: var(--text-secondary); font-size: 0.95rem; }
+
+/* CTA */
+.cta-section {
+  background:
+    linear-gradient(135deg, rgba(40,44,52,0.97) 0%, rgba(24,26,31,0.98) 100%),
+    radial-gradient(circle at 50% 50%, rgba(152,195,121,0.15) 0%, transparent 70%);
+  color: white;
+  text-align: center;
+  overflow: hidden;
+}
+
+.cta-section h2 {
+  font-family: var(--font-display);
+  font-size: 2.8rem;
+  margin-bottom: 2rem;
+  background: linear-gradient(45deg, var(--primary-glow), var(--blue-token));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.cta-section p { font-size: 1.2rem; margin-bottom: 2.5rem; color: var(--text-secondary); }
+
+/* Footer */
+footer {
+  background: rgba(10,10,15,0.98);
+  backdrop-filter: blur(20px);
+  color: var(--text-secondary);
+  text-align: center;
+  padding: 4rem 0 2rem;
+  border-top: 1px solid rgba(0,212,255,0.2);
+}
+
+.social-links { margin-bottom: 2.5rem; }
+
+.social-links a {
+  color: var(--primary-glow);
+  font-size: 2rem;
+  margin: 0 1.5rem;
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+.social-links a:hover {
+  color: var(--accent-glow);
+  transform: translateY(-5px);
+  filter: drop-shadow(0 0 10px var(--accent-glow));
+}
+
+footer p { font-size: 0.9rem; color: var(--text-secondary); }
+
+/* Team Section */
+.team { background: var(--dark-bg); }
+
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 3rem;
+  margin-top: 4rem;
+}
+
+.team-card {
+  text-align: center;
+  padding: 3rem 2rem;
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  border-radius: 25px;
+  border: 1px solid rgba(0,212,255,0.2);
+  box-shadow: var(--neon-glow), 0 25px 50px rgba(0,0,0,0.3);
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.team-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--secondary-glow), var(--accent-glow));
+}
+
+.team-card:hover {
+  transform: translateY(-15px) scale(1.02);
+  box-shadow: 0 0 50px rgba(124,58,237,0.5), 0 35px 70px rgba(0,0,0,0.4);
+  border-color: var(--secondary-glow);
+}
+
+.team-avatar {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  margin: 0 auto 1.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 900;
+  color: white;
+  position: relative;
+  z-index: 1;
+}
+
+.team-avatar::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary-glow), var(--accent-glow));
+  z-index: -1;
+  animation: spinBorder 4s linear infinite;
+}
+
+.team-avatar::before {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  border-radius: 50%;
+  background: var(--dark-bg);
+  z-index: 0;
+}
+
+.team-avatar span {
+  position: relative;
+  z-index: 2;
+  background: linear-gradient(45deg, var(--primary-glow), var(--accent-glow));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+@keyframes spinBorder {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.team-card h3 {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.team-card .role {
+  font-size: 0.9rem;
+  color: var(--primary-glow);
+  font-family: var(--font-display);
+  font-weight: 500;
+  margin-bottom: 1rem;
+  letter-spacing: 0.05em;
+}
+
+.team-card .bio {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+
+.team-socials {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.team-socials a {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+}
+
+.team-socials a:hover {
+  color: var(--primary-glow);
+  filter: drop-shadow(0 0 6px var(--primary-glow));
+  transform: translateY(-3px);
+}
+
+/* Stats ticker */
+.stats-ticker {
+  padding: 0;
+  background: rgba(24,26,31,0.95);
+  border-top: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.ticker-track {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  animation: tickerScroll 30s linear infinite;
+  padding: 1.2rem 0;
+}
+
+@keyframes tickerScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.stats-ticker:hover .ticker-track { animation-play-state: paused; }
+
+.ticker-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0 2rem;
+}
+
+.ticker-num {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 800;
+  background: linear-gradient(45deg, var(--coral-token), var(--accent-glow));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.ticker-label {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  letter-spacing: 0.04em;
+}
+
+.ticker-sep {
+  color: var(--border-color);
+  font-size: 0.9rem;
+  padding: 0 0.5rem;
+}
+
+/* =====================
+   MATERIAL EXPLORER SECTION
+   ===================== */
+.material-explorer {
+  background:
+    linear-gradient(135deg, rgba(24,26,31,0.97) 0%, rgba(30,33,39,0.95) 100%),
+    radial-gradient(circle at 60% 40%, rgba(97,175,239,0.1) 0%, transparent 60%);
+  padding: 100px 0;
+}
+
+.mat-selector-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 14px;
+  margin-bottom: 2.5rem;
+}
+
+.mat-btn {
+  padding: 1rem 0.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  background: var(--glass-bg);
+  color: var(--text-secondary);
+  font-family: var(--font-main);
+  font-size: 0.88rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.25s ease;
+  line-height: 1.3;
+  backdrop-filter: blur(10px);
+}
+
+.mat-btn .mat-icon {
+  font-size: 1.5rem;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.mat-btn:hover {
+  border-color: rgba(97,175,239,0.5);
+  color: var(--blue-token);
+  background: rgba(97,175,239,0.07);
+  transform: translateY(-3px);
+}
+
+.mat-btn.active {
+  border: 2px solid var(--primary-glow);
+  background: rgba(152,195,121,0.12);
+  color: var(--primary-glow);
+  box-shadow: 0 0 16px rgba(152,195,121,0.25);
+}
+
+.mat-info-box {
+  background: var(--glass-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 2rem 2.2rem;
+  min-height: 150px;
+  margin-bottom: 2.5rem;
+  backdrop-filter: blur(20px);
+  transition: all 0.3s ease;
+}
+
+.mat-info-box h3 {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+}
+
+.mat-info-box .mat-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0.75rem 0 1rem;
+}
+
+.mat-tag {
+  font-size: 0.75rem;
+  padding: 3px 11px;
+  border-radius: 20px;
+  font-family: var(--font-mono);
+  letter-spacing: 0.02em;
+}
+
+.mat-tag-good { background: rgba(152,195,121,0.15); color: var(--primary-glow); border: 1px solid rgba(152,195,121,0.3); }
+.mat-tag-mid  { background: rgba(229,192,123,0.15); color: var(--accent-glow);  border: 1px solid rgba(229,192,123,0.3); }
+.mat-tag-bad  { background: rgba(224,108,117,0.15); color: var(--coral-token);  border: 1px solid rgba(224,108,117,0.3); }
+
+.mat-info-box .mat-uses {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.6rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.mat-info-box p.mat-desc {
+  color: var(--text-secondary);
+  font-size: 1rem;
+  line-height: 1.75;
+}
+
+.mat-placeholder {
+  color: var(--text-secondary);
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100px;
+  font-family: var(--font-mono);
+}
+
+.chart-section-label {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  letter-spacing: 0.05em;
+  margin-bottom: 1.4rem;
+  text-transform: uppercase;
+}
+
+.bar-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.bar-name {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  min-width: 68px;
+  text-align: right;
+}
+
+.bar-name.active-label {
+  color: var(--primary-glow);
+  font-weight: 600;
+}
+
+.bar-track {
+  flex: 1;
+  background: rgba(40,44,52,0.8);
+  border-radius: 4px;
+  height: 26px;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+}
+
+.bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 10px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  font-family: var(--font-mono);
+  color: rgba(255,255,255,0.9);
+  transition: width 0.6s cubic-bezier(0.4,0,0.2,1), opacity 0.3s ease;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .hero-content { grid-template-columns: 1fr; }
+  .hero-right { display: none; }
+}
+
+@media (max-width: 768px) {
+  .nav-links { display: none; flex-direction: column; gap: 1rem; position: absolute; top: 70px; left: 0; right: 0; background: rgba(10,10,15,0.98); padding: 2rem; border-bottom: 1px solid rgba(0,212,255,0.2); }
+  .nav-links.open { display: flex; }
+  .hamburger { display: flex; }
+  .hero h1 { font-size: 2.5rem; }
+  .section-title { font-size: 2rem; }
+  .features-grid, .stats-grid, .steps-grid, .specs-grid { grid-template-columns: 1fr; gap: 2rem; }
+  .stat-item h3 { font-size: 3rem; }
+  .mat-selector-grid { grid-template-columns: repeat(4, 1fr); }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { opacity: 0; }
+.fade-in.visible { animation: fadeInUp 0.8s ease forwards; }
+</style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <div class="logo">ElectroTech</div>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#materials">Materials</a></li>
+      <li><a href="#material-explorer">Explorer</a></li>
+      <li><a href="#electroplating">Electroplating</a></li>
+      <li><a href="#benefits">Benefits</a></li>
+      <li><a href="#team">Team</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+</header>
+
+<!-- Hero -->
+<section id="home" class="hero">
+  <div class="hero-content">
+    <div class="hero-left">
+      <span class="hero-tag fade-in">// corrosion-resistance-v2.0</span>
+      <h1 class="fade-in">Corrosion<br>Resistance<br>in Electronics</h1>
+      <p class="fade-in">Advanced materials and electroplating techniques revolutionizing electronic component longevity and performance in harsh environments.</p>
+      <div class="hero-buttons fade-in">
+        <a href="#materials" class="cta-button">Explore Solutions</a>
+        <a href="#team" class="cta-button-outline">Meet the Team</a>
+      </div>
+    </div>
+    <div class="hero-right fade-in">
+      <div class="win-bar">
+        <div class="win-dot red"></div>
+        <div class="win-dot amber"></div>
+        <div class="win-dot green"></div>
+        <span class="win-title">corrosion_shield.ts</span>
+      </div>
+      <div class="code-line"><span class="code-ln">1</span><span><span class="code-comment">// ElectroTech Solutions v2.0</span></span></div>
+      <div class="code-line"><span class="code-ln">2</span><span><span class="code-keyword">import</span> <span class="code-op">{</span> <span class="code-var">Shield</span><span class="code-op">,</span> <span class="code-var">NanoCoating</span> <span class="code-op">}</span> <span class="code-keyword">from</span> <span class="code-string">'@electrotech/core'</span></span></div>
+      <div class="code-line"><span class="code-ln">3</span><span>&nbsp;</span></div>
+      <div class="code-line"><span class="code-ln">4</span><span><span class="code-keyword">const</span> <span class="code-var">protection</span> <span class="code-op">=</span> <span class="code-keyword">new</span> <span class="code-fn">NanoCoating</span><span class="code-op">({</span></span></div>
+      <div class="code-line"><span class="code-ln">5</span><span>&nbsp;&nbsp;<span class="code-var">thickness</span><span class="code-op">:</span> <span class="code-string">'50nm–10µm'</span><span class="code-op">,</span></span></div>
+      <div class="code-line"><span class="code-ln">6</span><span>&nbsp;&nbsp;<span class="code-var">resistance</span><span class="code-op">:</span> <span class="code-num">99.9</span><span class="code-op">,</span> <span class="code-comment">// percent</span></span></div>
+      <div class="code-line"><span class="code-ln">7</span><span>&nbsp;&nbsp;<span class="code-var">lifespan</span><span class="code-op">:</span> <span class="code-string">'25+ years'</span><span class="code-op">,</span></span></div>
+      <div class="code-line"><span class="code-ln">8</span><span>&nbsp;&nbsp;<span class="code-var">selfHealing</span><span class="code-op">:</span> <span class="code-keyword">true</span></span></div>
+      <div class="code-line"><span class="code-ln">9</span><span><span class="code-op">})</span></span></div>
+      <div class="code-line"><span class="code-ln">10</span><span>&nbsp;</span></div>
+      <div class="code-line"><span class="code-ln">11</span><span><span class="code-fn">protection</span><span class="code-op">.</span><span class="code-fn">apply</span><span class="code-op">(</span><span class="code-var">component</span><span class="code-op">)</span></span></div>
+      <div class="code-line"><span class="code-ln">12</span><span>&nbsp;&nbsp;<span class="code-op">.</span><span class="code-fn">then</span><span class="code-op">((</span><span class="code-var">result</span><span class="code-op">) =></span> <span class="code-op">{</span></span></div>
+      <div class="code-line"><span class="code-ln">13</span><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-var">console</span><span class="code-op">.</span><span class="code-fn">log</span><span class="code-op">(</span><span class="code-string">`✓ Protected: <span class="code-op">${</span><span class="code-var">result</span><span class="code-op">.</span><span class="code-var">status</span><span class="code-op">}</span>`</span><span class="code-op">)</span></span></div>
+      <div class="code-line"><span class="code-ln">14</span><span>&nbsp;&nbsp;<span class="code-op">})</span></span></div>
+    </div>
+  </div>
+</section>
+
+<!-- Materials -->
+<section id="materials" class="container">
+  <h2 class="section-title fade-in">Advanced Materials</h2>
+  <p class="section-subtitle fade-in">// next-gen coating technologies</p>
+  <div class="features-grid">
+    <div class="feature-card fade-in">
+      <i class="fas fa-layer-group"></i>
+      <h3>Nanostructured Coatings</h3>
+      <p>Ultra-thin nanostructured films providing superior barrier protection against moisture, oxygen, and corrosive ions while maintaining electrical conductivity.</p>
+    </div>
+    <div class="feature-card fade-in">
+      <i class="fas fa-microchip"></i>
+      <h3>Polymer-Ceramic Hybrids</h3>
+      <p>Hybrid materials combining the flexibility of polymers with ceramic nanoparticles for exceptional corrosion resistance and thermal stability.</p>
+    </div>
+    <div class="feature-card fade-in">
+      <i class="fas fa-shield-alt"></i>
+      <h3>Self-Healing Polymers</h3>
+      <p>Intelligent materials that autonomously repair micro-cracks and defects, extending component life in dynamic operating conditions.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Stats ticker -->
+<section class="stats-ticker">
+  <div class="ticker-track">
+    <div class="ticker-item"><span class="ticker-num">99.9%</span><span class="ticker-label">Corrosion Resistance</span></div>
+    <div class="ticker-sep">▸</div>
+    <div class="ticker-item"><span class="ticker-num">10×</span><span class="ticker-label">Longer Lifespan</span></div>
+    <div class="ticker-sep">▸</div>
+    <div class="ticker-item"><span class="ticker-num">50%</span><span class="ticker-label">Reduced Failure Rate</span></div>
+    <div class="ticker-sep">▸</div>
+    <div class="ticker-item"><span class="ticker-num">95%</span><span class="ticker-label">Signal Integrity</span></div>
+    <div class="ticker-sep">▸</div>
+    <div class="ticker-item"><span class="ticker-num">25+</span><span class="ticker-label">Years Service Life</span></div>
+    <div class="ticker-sep">▸</div>
+    <div class="ticker-item"><span class="ticker-num">50nm</span><span class="ticker-label">Min Coating Thickness</span></div>
+    <div class="ticker-sep">▸</div>
+    <div class="ticker-item"><span class="ticker-num">99.9%</span><span class="ticker-label">Corrosion Resistance</span></div>
+    <div class="ticker-sep">▸</div>
+    <div class="ticker-item"><span class="ticker-num">10×</span><span class="ticker-label">Longer Lifespan</span></div>
+    <div class="ticker-sep">▸</div>
+    <div class="ticker-item"><span class="ticker-num">50%</span><span class="ticker-label">Reduced Failure Rate</span></div>
+    <div class="ticker-sep">▸</div>
+    <div class="ticker-item"><span class="ticker-num">95%</span><span class="ticker-label">Signal Integrity</span></div>
+    <div class="ticker-sep">▸</div>
+  </div>
+</section>
+
+<!-- ===================== MATERIAL EXPLORER ===================== -->
+<section id="material-explorer" class="material-explorer">
+  <div class="container">
+    <h2 class="section-title fade-in">Material Explorer</h2>
+    <p class="section-subtitle fade-in">// select a material to inspect its corrosion profile</p>
+
+    <div class="mat-selector-grid fade-in">
+      <button class="mat-btn" data-mat="iron"    onclick="selectMat(this)"><span class="mat-icon">🔩</span>Iron</button>
+      <button class="mat-btn" data-mat="gold"    onclick="selectMat(this)"><span class="mat-icon">✨</span>Gold</button>
+      <button class="mat-btn" data-mat="silver"  onclick="selectMat(this)"><span class="mat-icon">💿</span>Silver</button>
+      <button class="mat-btn" data-mat="steel"   onclick="selectMat(this)"><span class="mat-icon">⚙️</span>Steel</button>
+      <button class="mat-btn" data-mat="bronze"  onclick="selectMat(this)"><span class="mat-icon">🏺</span>Bronze</button>
+      <button class="mat-btn" data-mat="copper"  onclick="selectMat(this)"><span class="mat-icon">🔌</span>Copper</button>
+      <button class="mat-btn" data-mat="plastic" onclick="selectMat(this)"><span class="mat-icon">🧪</span>Plastic</button>
+    </div>
+
+    <div class="mat-info-box fade-in" id="matInfoBox">
+      <div class="mat-placeholder">// select a material above to see its corrosion profile</div>
+    </div>
+
+    <p class="chart-section-label fade-in">Corrosivity index — relative susceptibility (higher = corrodes faster)</p>
+    <div id="matBars" class="fade-in"></div>
+  </div>
+</section>
+
+<!-- Electroplating -->
+<section id="electroplating" class="container">
+  <h2 class="section-title fade-in">Electroplating Technologies</h2>
+  <p class="section-subtitle fade-in">// three-stage precision process</p>
+  <div class="steps-grid">
+    <div class="step-card fade-in">
+      <div class="step-number">1</div>
+      <h3>Surface Preparation</h3>
+      <p>Precision cleaning and activation ensuring optimal adhesion and uniform deposition across complex geometries.</p>
+    </div>
+    <div class="step-card fade-in">
+      <div class="step-number">2</div>
+      <h3>Pulsed Electroplating</h3>
+      <p>Advanced pulse plating techniques producing dense, crack-free deposits with controlled grain structure for maximum protection.</p>
+    </div>
+    <div class="step-card fade-in">
+      <div class="step-number">3</div>
+      <h3>Multi-Layer Systems</h3>
+      <p>Engineered multi-layer stacks combining noble metals, barriers, and conductive layers for comprehensive protection.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Tech Specs -->
+<section class="tech-specs">
+  <div class="container">
+    <h2 class="section-title fade-in">Technical Specifications</h2>
+    <p class="section-subtitle fade-in">// performance data & tolerances</p>
+    <div class="specs-grid">
+      <div class="spec-item fade-in">
+        <i class="fas fa-thermometer-half"></i>
+        <h4>Thermal Range</h4>
+        <p>Operating range from -65°C to +200°C with stable electrical and mechanical properties throughout.</p>
+      </div>
+      <div class="spec-item fade-in">
+        <i class="fas fa-tint"></i>
+        <h4>Humidity Resistance</h4>
+        <p>Rated for 85% relative humidity environments with zero corrosion initiation after 1000-hour salt spray testing.</p>
+      </div>
+      <div class="spec-item fade-in">
+        <i class="fas fa-atom"></i>
+        <h4>Coating Thickness</h4>
+        <p>Nanoscale precision from 50nm to 10µm controlled deposition using atomic layer engineering.</p>
+      </div>
+      <div class="spec-item fade-in">
+        <i class="fas fa-bolt"></i>
+        <h4>Conductivity</h4>
+        <p>Less than 0.01 Ohm/sq sheet resistance maintained post-coating with zero degradation over lifecycle.</p>
+      </div>
+      <div class="spec-item fade-in">
+        <i class="fas fa-flask"></i>
+        <h4>Chemical Resistance</h4>
+        <p>Resistant to acids, alkalis, solvents, and industrial cleaning agents across full pH range.</p>
+      </div>
+      <div class="spec-item fade-in">
+        <i class="fas fa-clock"></i>
+        <h4>Service Life</h4>
+        <p>Certified for 25+ year operational lifespan in aerospace and marine grade environments.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Benefits -->
+<section id="benefits" class="container">
+  <h2 class="section-title fade-in">Key Benefits</h2>
+  <p class="section-subtitle fade-in">// why ElectroTech leads the field</p>
+  <div class="features-grid">
+    <div class="feature-card fade-in">
+      <i class="fas fa-bolt"></i>
+      <h3>Enhanced Reliability</h3>
+      <p>Drastically reduced failure rates in harsh environments including marine, automotive, and aerospace applications.</p>
+    </div>
+    <div class="feature-card fade-in">
+      <i class="fas fa-chart-line"></i>
+      <h3>Cost Efficiency</h3>
+      <p>Lower maintenance costs and extended service intervals providing superior ROI over product lifecycle.</p>
+    </div>
+    <div class="feature-card fade-in">
+      <i class="fas fa-cogs"></i>
+      <h3>Performance Optimization</h3>
+      <p>Maintained electrical performance with minimal resistance increase and preserved signal integrity.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Team -->
+<section id="team" class="team">
+  <div class="container">
+    <h2 class="section-title fade-in">Meet the Team</h2>
+    <p class="section-subtitle fade-in">// the humans behind the tech</p>
+    <div class="team-grid">
+
+      <div class="team-card fade-in">
+        <div class="team-avatar"><span>JV</span></div>
+        <h3>Jainel Vora</h3>
+        <p class="role">Electroplating Specialist</p>
+        <p class="bio">Expert in pulsed electroplating and multi-layer deposition systems, pioneering precision techniques for complex electronic geometries.</p>
+        <div class="team-socials">
+          <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+          <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+          <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
+        </div>
+      </div>
+
+      <div class="team-card fade-in">
+        <div class="team-avatar"><span>AW</span></div>
+        <h3>Aryan Wadhawana</h3>
+        <p class="role">Research & Development Lead</p>
+        <p class="bio">Drives innovation in self-healing polymer-ceramic hybrids and long-lifecycle coating solutions for aerospace and marine applications.</p>
+        <div class="team-socials">
+          <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+          <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+          <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
+        </div>
+      </div>
+
+      <div class="team-card fade-in">
+        <div class="team-avatar"><span>AY</span></div>
+        <h3>Anikshaa Yadav</h3>
+        <p class="role">Materials Engineer</p>
+        <p class="bio">Specializes in nanostructured coatings and advanced polymer systems for next-generation corrosion protection in electronics.</p>
+        <div class="team-socials">
+          <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+          <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+          <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="contact" class="cta-section">
+  <div class="container">
+    <h2 class="fade-in">Ready to Protect Your Electronics?</h2>
+    <p class="fade-in">Contact our materials engineering experts today</p>
+    <a href="mailto:info@electrotechsolutions.com" class="cta-button">Get a Quote</a>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="container">
+    <div class="social-links">
+      <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+      <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+      <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
+    </div>
+    <p>&copy; 2024 ElectroTech Solutions. All rights reserved. | Advanced Corrosion Protection for Electronics</p>
+  </div>
+</footer>
+
+<script>
+// Mobile hamburger menu
+const hamburger = document.getElementById('hamburger');
+const navLinks = document.getElementById('navLinks');
+hamburger.addEventListener('click', () => { navLinks.classList.toggle('open'); });
+
+// Smooth scrolling
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function(e) {
+    e.preventDefault();
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) {
+      navLinks.classList.remove('open');
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+
+// Header on scroll
+window.addEventListener('scroll', () => {
+  const header = document.querySelector('header');
+  header.style.background = window.scrollY > 100
+    ? 'rgba(10, 10, 15, 0.98)'
+    : 'rgba(10, 10, 15, 0.95)';
+});
+
+// Fade in on scroll
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => { entry.target.classList.add('visible'); }, i * 100);
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+// =====================
+// MATERIAL EXPLORER
+// =====================
+const MAT_DATA = {
+  iron:    { label:'Iron',    score:92, color:'#888780', use:'Structural frames, early PCB hardware',
+             desc:'Iron corrodes rapidly in moisture and oxygen, forming iron oxide (rust). In electronics, unprotected iron causes catastrophic circuit failure within weeks in humid conditions.',
+             tags:[{t:'High rust rate',c:'bad'},{t:'Poor humidity tolerance',c:'bad'},{t:'Low cost',c:'good'}] },
+  gold:    { label:'Gold',    score:2,  color:'#BA7517', use:'Contact pins, connector pads, bond wires',
+             desc:'Gold is virtually inert in all standard environments — it forms no oxides and maintains reliable electrical contact over decades. The benchmark material for aerospace and medical electronics.',
+             tags:[{t:'Near-zero oxidation',c:'good'},{t:'Excellent conductivity',c:'good'},{t:'High cost',c:'mid'}] },
+  silver:  { label:'Silver',  score:18, color:'#5F5E5A', use:'Contacts, RF shielding, conductors',
+             desc:'Silver has outstanding conductivity but tarnishes via sulfidation when exposed to sulfur compounds in air. The silver sulfide layer increases contact resistance in polluted environments.',
+             tags:[{t:'Sulfur tarnish risk',c:'mid'},{t:'Best conductivity',c:'good'},{t:'Moderate cost',c:'mid'}] },
+  steel:   { label:'Steel',   score:55, color:'#638596', use:'Chassis, heat sinks, enclosures',
+             desc:'Stainless steel alloyed with chromium forms a self-repairing passive oxide layer, far superior to plain iron. Still susceptible to pitting corrosion in chloride-heavy (marine) environments.',
+             tags:[{t:'Passive oxide layer',c:'good'},{t:'Chloride vulnerable',c:'mid'},{t:'Durable & cheap',c:'good'}] },
+  bronze:  { label:'Bronze',  score:22, color:'#854F0B', use:'Connector housings, switches, springs',
+             desc:'Bronze (copper-tin alloy) forms a protective patina of copper oxides that slows further corrosion. Its natural passivation makes it ideal for marine and outdoor electronics.',
+             tags:[{t:'Self-passivating',c:'good'},{t:'Marine grade',c:'good'},{t:'Moderate conductivity',c:'mid'}] },
+  copper:  { label:'Copper',  score:30, color:'#993C1D', use:'PCB traces, wires, bus bars, coils',
+             desc:'Copper oxidizes in air forming cupric oxide which increases resistance. It is highly workable and corrosion products are less destructive than iron\'s — viable with conformal coating.',
+             tags:[{t:'Surface oxidation',c:'mid'},{t:'Excellent conductivity',c:'good'},{t:'Industry standard',c:'good'}] },
+  plastic: { label:'Plastic', score:4,  color:'#185FA5', use:'Enclosures, insulators, substrates',
+             desc:'Engineering plastics (ABS, PTFE, polycarbonate) contain no reactive metals so are immune to electrochemical corrosion. They degrade via UV and solvents, but never via oxidation.',
+             tags:[{t:'Zero electrochemical corrosion',c:'good'},{t:'UV degradation risk',c:'mid'},{t:'Excellent insulator',c:'good'}] }
+};
+
+const MAT_ORDER = ['iron','steel','copper','bronze','silver','plastic','gold'];
+const TAG_CLS   = { good:'mat-tag mat-tag-good', mid:'mat-tag mat-tag-mid', bad:'mat-tag mat-tag-bad' };
+
+let activeMat = null;
+
+function renderBars(active) {
+  const sorted = [...MAT_ORDER].sort((a,b) => MAT_DATA[b].score - MAT_DATA[a].score);
+  document.getElementById('matBars').innerHTML = sorted.map(m => {
+    const d = MAT_DATA[m];
+    const isActive = m === active;
+    return `<div class="bar-row">
+      <span class="bar-name${isActive?' active-label':''}">${d.label}</span>
+      <div class="bar-track">
+        <div class="bar-fill" style="width:${d.score}%;background:${d.color};opacity:${isActive||!active?1:0.35}">${d.score}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function selectMat(btn) {
+  document.querySelectorAll('.mat-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const m = btn.dataset.mat;
+  activeMat = m;
+  const d = MAT_DATA[m];
+  document.getElementById('matInfoBox').innerHTML = `
+    <h3>${d.label}</h3>
+    <div class="mat-tags">${d.tags.map(t=>`<span class="${TAG_CLS[t.c]}">${t.t}</span>`).join('')}</div>
+    <p class="mat-uses">// Common uses — ${d.use}</p>
+    <p class="mat-desc">${d.desc}</p>`;
+  renderBars(m);
+}
+
+renderBars(null);
+</script>
+</body>
+</html>
